@@ -3,7 +3,7 @@ Addon to import Gaussian Cube File, Only For Blender 3.5+ (written in Blender 3.
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/fe48a18c-12d8-4a01-af41-56684837ff60)
 
 To use Older versions of Blender you need to disable OpenVDB and Kdtree_Bonding as  pyopenvdb, scipy, matplotlib aren't available.
-
+(you have to install manually)
 Main functionality:
   - Use the Built in pyopenvdb, scipy, matplotlib, numpy, os
   - Uses OPENVDB, the read volume is exported to a cache file named *_vdb_cache, and then imported back into Blender. Its in ./*_vdb_cache directory where you can find all the VDB File and open it in other softwares.
