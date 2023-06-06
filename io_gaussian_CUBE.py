@@ -4,8 +4,6 @@ bl_info = {
     "author": "René Meng - ISCD",
     "version": (1, 0, 0),
     "blender": (3, 5, 0),
-    #"blender": (3, 5, 1),
-    #"blender": (4, 0, 0),
     "location": "File -> Import -> CUBE (.cube)",
     "warning": "",
     "doc_url": "https://iscd.sorbonne-universite.fr/",
