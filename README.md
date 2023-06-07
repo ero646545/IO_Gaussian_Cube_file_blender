@@ -5,6 +5,7 @@ Addon to import Gaussian Cube File, Only For Blender 3.5+ (written in Blender 3.
 To use Older versions of Blender you may need to disable OpenVDB as pyopenvdb if it isn't already.
 
 WINDOWS USER: before opening blender, right click and execute with admin privilege it will install scipy, matplotlib automatically. First time it's slow because it download the library from PIPy.
+
 LINUX USER: sorry you have to install them manually maybe if i am really fed up one day i'll just put the file in the directory...
 
 Main functionality:
