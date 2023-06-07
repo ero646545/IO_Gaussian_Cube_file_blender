@@ -11,26 +11,64 @@ bl_info = {
 }
 import bpy
 import numpy as np
+import os
 
-from scipy.spatial import cKDTree
 from bpy.props import (
         StringProperty,
         BoolProperty,
         EnumProperty,
         IntProperty,
         FloatProperty,
-        )
-import pyopenvdb as openvdb
-import os
-import matplotlib.colors as mcolors
+        ) 
+blendervdb=True#version3.5+        
+blenderscipy=True #Lets suppose scipy/matplotlib is installed
+blendermatplotlib=True
+try:
+    import pyopenvdb as openvdb
+except ImportError:
+    blendervdb=False
+    
+   
+try:#handle the scipy error
+    from scipy.spatial import cKDTree
+    import matplotlib.colors as mcolors
+    
+    
+except ImportError:
+    print("Scipy and matplotlib are not installed. Installing Scipy and matplotlib with PIP...")
+    import sys
+    from pathlib import Path
+    import subprocess
+    py_exec = str(sys.executable)
+    lib = Path(py_exec).parent.parent / "lib"
+    # Ensure pip is installed
+    subprocess.call([py_exec, "-m", "ensurepip", "--user"])
+    # Install packages
+    subprocess.call([py_exec, "-m", "pip", "install", f"--target={str(lib)}", "matplotlib"])
+    subprocess.call([py_exec, "-m", "pip", "install", f"--target={str(lib)}", "scipy"])
+    
+    try:#Verify if installation worked
+        from scipy.spatial import cKDTree
+        import matplotlib.colors as mcolors  
+          
+    except  ImportError:
+        # Display an error message
+        msg = "Could not install scipy and matplotlib, try opening Blender with admin privilege."
+        print(msg)
+        blenderscipy=False
   
 # create addon parameter interface
 class CUBEImportPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
-    
-    
-        
-        
+    def draw(self, context):
+        layout = self.layout
+        # Display an error message
+        if not blenderscipy:
+            layout.label(text="Could not install scipy and matplotlib.",icon='ERROR')
+            layout.label(text="Try opening Blender with admin privilege.")  
+        if not blendervdb:
+            layout.label(text="Could not find pyopenvdb.",icon='ERROR')
+            layout.label(text="Try using Blender 3.5+")
 #Cube importer addon that uses file browser
 class CUBEImportOperator(bpy.types.Operator):
     bl_idname = "import_scene.cube"
@@ -45,7 +83,7 @@ class CUBEImportOperator(bpy.types.Operator):
     )
     int_bond : IntProperty(
                name="Number of bonding",
-               default=4,
+               default=4*int(blenderscipy),# deactivate 
                min=0,
                max=10,
                description="Use cKDtree library to generate bonds with the nearest neighbour. Its an average bonding number that you can set below need scipy already installed. For tetravalent atoms bonding value is 4. Default Value is 0 Bonding is disabled.",
@@ -56,7 +94,7 @@ class CUBEImportOperator(bpy.types.Operator):
                description="I want to color Positive value to Red and Negative value in Blue")
     bool_vdb : BoolProperty(
                name="Open VDB",
-               default=True,
+               default=blendervdb,
                description="Use OpenVDB to display volume, this method is faster and better but allows less tweaking. This create 2 positive and negative VDB file in the local directory. Uncheck only if OpenVDB is unsupported")
     float_thresholds : FloatProperty(
                name="Define the solid mode relative thresholds (default 0)",
@@ -69,6 +107,15 @@ class CUBEImportOperator(bpy.types.Operator):
     
     def draw(self, context):# disposal of the buttons
         layout = self.layout
+        if not blenderscipy:
+            layout.label(text="Could not install scipy and matplotlib.",icon='ERROR')
+            layout.label(text="Try opening Blender with Admin privilege.")
+            layout.label(text="")  
+        if not blendervdb:# just to inform that Not using OpenVDB is not optimal
+            layout.label(text="Could not find pyopenvdb.",icon='ERROR')
+            layout.label(text="Try using Blender 3.5+")    
+            layout.label(text="")  
+            
         layout.label(text="Number of bond per atom. A 0 value is disabled")
         layout.prop(self, "int_bond")
         layout.label(text="I want more colours!(slower if checked)")
@@ -82,9 +129,9 @@ class CUBEImportOperator(bpy.types.Operator):
     #cube importer code
     def execute(self, context):
         preferences = self
-        def create_vdb(name, matname,dataf,framek):         
-            if dataf.size == 0:
-                return
+        def create_vdb(name, matname,dataf,framek):
+            if dataf.size==0:#don't try to import empty things
+                return       
             # Create an OpenVDB volume from the pixel data
             grid = openvdb.FloatGrid()
             
@@ -93,45 +140,48 @@ class CUBEImportOperator(bpy.types.Operator):
             
             # Blender needs grid name to be "density" or "velocity" to be colorful (need data to be Vector Float)
             grid.name = 'density'
-            # Convert data to vector array with color coding
-            # This version of the code is optimised by chat gpt
-            seuil=preferences.float_thresholds*np.max(dataf)#Thresholds Relative to maximum
-            vector_data = np.zeros(dataf.shape + (3,))
-            positive_values = np.where(dataf > seuil)
-            negative_values = np.where(dataf > seuil)
-            zero_values = np.where(dataf <= seuil)
-            
-            if matname != "negative":
-                colorval = dataf[positive_values]
-                if colorval.size > 0:
-                    min_value = np.min(colorval)
-                    max_value = np.max(colorval)
-                    if min_value != max_value:  # Check if the minimum and maximum values are not equal
-                        normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
-                        gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 6 * seuil, 0), (1.5, 0, 0)])  # Define your gradient colors
-                        vector_data[positive_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
+            if not blenderscipy==False:# handle the case where open vdb is active but not scipy/matplotlib
+                
+                # Convert data to vector array with color coding
+                # This version of the code is optimised by chat gpt
+                seuil=preferences.float_thresholds*np.max(dataf)#Thresholds Relative to maximum
+                vector_data = np.zeros(dataf.shape + (3,))
+                positive_values = np.where(dataf > seuil)
+                negative_values = np.where(dataf > seuil)
+                zero_values = np.where(dataf <= seuil)
+                if matname != "negative":
+                    colorval = dataf[positive_values]
+                    if colorval.size > 0:
+                        min_value = np.min(colorval)
+                        max_value = np.max(colorval)
+                        if min_value != max_value:  # Check if the minimum and maximum values are not equal
+                            normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
+                            gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 6 * seuil, 0), (1.5, 0, 0)])  # Define your gradient colors
+                            vector_data[positive_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
+                    else:
+                        return
                 else:
-                    return
-            else:
-                colorval = dataf[negative_values]
-                if colorval.size > 0:
-                    min_value = np.min(colorval)
-                    max_value = np.max(colorval)
-                    if min_value != max_value:  # Check if the minimum and maximum values are not equal
-                        normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
-                        gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 2 * seuil, 0), (0, 0, 6)])  # Define your gradient colors
-                        vector_data[negative_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
-                else:
-                    return
-            # Assign zeros for zero_values
-            vector_data[zero_values] = np.zeros((3,))
- 
-            # Create a Blender-compatible VDB grid
-            vdb_grid = openvdb.Vec3SGrid()
-            vdb_grid.copyFromArray(np.array(vector_data).reshape(dataf.shape + (3,)))
+                    colorval = dataf[negative_values]
+                    if colorval.size > 0:
+                        min_value = np.min(colorval)
+                        max_value = np.max(colorval)
+                        if min_value != max_value:  # Check if the minimum and maximum values are not equal
+                            normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
+                            gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 2 * seuil, 0), (0, 0, 6)])  # Define your gradient colors
+                            vector_data[negative_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
+                    else:
+                        return
+                # Assign zeros for zero_values
+                vector_data[zero_values] = np.zeros((3,))
+     
+                # Create a Blender-compatible VDB grid
+                vdb_grid = openvdb.Vec3SGrid()
+                vdb_grid.copyFromArray(np.array(vector_data).reshape(dataf.shape + (3,)))
 
-            # Set the grid name to "velocity" for color display
-            vdb_grid.name='color_density'
+                # Set the grid name to "velocity" for color display
+                vdb_grid.name='color_density'
+                
+            
             # Create a directory for the VDB cache
             cache_dir = self.filepath + '_vdb_cache'
             suffix = ''
@@ -146,8 +196,13 @@ class CUBEImportOperator(bpy.types.Operator):
             
             # Define the file path for the VDB file
             vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_'+ str(int(framek)).zfill(len(str(len(self.files)))) + '.vdb')
+            
             # Writes CT volume to a VDB file
-            openvdb.write(vdbfile, [grid,vdb_grid]) #color and monochrome 
+            if not blenderscipy==False:# handle again the case where open vdb is active but not scipy/matplotlib
+                openvdb.write(vdbfile, [grid,vdb_grid]) #color and monochrome 
+            else:
+                openvdb.write(vdbfile, [grid])
+                
             
             if matname=="negative":#if negative put to negative list
                 negfile.append(vdbfile)
@@ -196,7 +251,7 @@ class CUBEImportOperator(bpy.types.Operator):
             # Create the mesh object and add the vertices to it
             mesh = bpy.data.meshes.new("density_mesh")
             mesh.from_pydata(vertices, [], [])
-
+            
             # Create a mesh object and link it to the scene
             obj = bpy.data.objects.new(name, mesh)
             bpy.context.scene.collection.objects.link(obj)
@@ -230,7 +285,8 @@ class CUBEImportOperator(bpy.types.Operator):
             add_node = gn_tree.nodes.new(type="ShaderNodeMath")
             add_node.operation = "ADD"
             add_node.location = (-400, 0)
-            add_node.inputs[1].default_value = .41
+            seuil=preferences.float_thresholds
+            add_node.inputs[1].default_value = .40+seuil
             gn_mat = gn_tree.nodes.new(type="GeometryNodeSetMaterial")
             #set material
            
@@ -328,8 +384,8 @@ class CUBEImportOperator(bpy.types.Operator):
             tree = cKDTree(atoms)
 
             # Create a new mesh object
-            mesh = bpy.data.meshes.new(name="Bond Mesh")
-            object = bpy.data.objects.new(name="atoms", object_data=mesh)
+            mesh = bpy.data.meshes.new(name=os.path.basename(self.filepath))
+            object = bpy.data.objects.new(name=os.path.basename(self.filepath), object_data=mesh)
             object.scale=(x1,y1,z1)# set the right scale
             bpy.context.scene.collection.objects.link(object)
             
@@ -426,7 +482,7 @@ class CUBEImportOperator(bpy.types.Operator):
                             vertices.append((i, j, k)) 
                             vertices_weight.append(data[i][j][k])
                             
-
+                
                 #____________________________________________________#
                             #place objects     
                 #____________________________________________________# 
@@ -448,13 +504,14 @@ class CUBEImportOperator(bpy.types.Operator):
                         for i, vertex in enumerate(vertices):
                             obj1.add([i], vertices_weight[i], 'REPLACE')
                         
-                        create_obj_node(os.path.basename(self.filepath)+'_neg_density','negative')
+                        if len(data):# If there is no negative value, just don't create it
+                            create_obj_node(os.path.basename(self.filepath)+'_neg_density','negative')
                         
-                        obj2 = bpy.context.active_object.vertex_groups.new(name='density')
-                       
-                        for i, vertex in enumerate(vertices):
-                            obj2.add([i], -vertices_weight[i], 'REPLACE')
-                        bpy.data.scenes[-1].render.engine ='CYCLES'
+                            obj2 = bpy.context.active_object.vertex_groups.new(name='density')
+                            
+                            for i, vertex in enumerate(vertices):
+                                obj2.add([i], -vertices_weight[i], 'REPLACE')
+                            bpy.data.scenes[-1].render.engine ='CYCLES'
                         #close our windows
                         bpy.ops.wm.window_close()
                         
@@ -462,6 +519,7 @@ class CUBEImportOperator(bpy.types.Operator):
                         
                         create_vdb('pos_density','positive',data,framek)
                         data*=-1#faster than data=-data
+                        
                         create_vdb('neg_density','negative',data,framek)
                         
                 else:# ***Uses monochrome display(faster)***
@@ -490,11 +548,11 @@ class CUBEImportOperator(bpy.types.Operator):
                     object=JamesBond(atoms)
             elif framek == 0:#Create points instead   
                 
-                mesh1 = bpy.data.meshes.new("atoms")
+                mesh1 = bpy.data.meshes.new(os.path.basename(self.filepath))
                 mesh1.from_pydata(atoms, [], [])
                 
                 # Create a mesh object and link it to the scene
-                object = bpy.data.objects.new("atoms", mesh1)
+                object = bpy.data.objects.new(os.path.basename(self.filepath), mesh1)
                 
                 object.scale=(x1,y1,z1)# set the right scale
                 bpy.context.scene.collection.objects.link(object)
