@@ -1,5 +1,5 @@
 # IO_Gaussian_Cube_file_blender
-Addon to import Gaussian Cube File, Only For Blender 3.5+ (written in Blender 3.5). (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
+Addon to import Gaussian Cube File, Only For Blender 2.9-3.5+ (written in Blender 3.5). (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/fe48a18c-12d8-4a01-af41-56684837ff60)
 
 To use Older versions of Blender you may need to disable OpenVDB as pyopenvdb if it isn't already.
