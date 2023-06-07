@@ -428,7 +428,7 @@ class CUBEImportOperator(bpy.types.Operator):
                 o.select_set(False)
                 
             # Load the .cube file into a numpy array
-            with open(os.path.dirname(self.filepath)+'\\'+file.name, 'r') as f:
+            with open(os.path.dirname(self.filepath)+'/'+file.name, 'r') as f:
                 # Skip the first two lines and Check for Sick case
                 MO=False
                 for i in f.readline():
