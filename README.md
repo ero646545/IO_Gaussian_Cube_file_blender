@@ -2,10 +2,13 @@
 Addon to import Gaussian Cube File, Only For Blender 3.5+ (written in Blender 3.5). (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/fe48a18c-12d8-4a01-af41-56684837ff60)
 
-To use Older versions of Blender you need to disable OpenVDB and Kdtree_Bonding as  pyopenvdb, scipy, matplotlib aren't available.
-(you have to install manually)
+To use Older versions of Blender you may need to disable OpenVDB as pyopenvdb if it isn't already.
+
+WINDOWS USER: before opening blender, right click and execute with admin privilege it will install scipy, matplotlib automatically.
+LINUX USER: sorry you have to install them manually maybe if i am really fed up one day i'll just put the file in the directory...
+
 Main functionality:
-  - Use the Built in pyopenvdb, scipy, matplotlib, numpy, os
+  - Use the Built in pyopenvdb, numpy, os
   - Uses OPENVDB, the read volume is exported to a cache file named *_vdb_cache, and then imported back into Blender. Its in ./*_vdb_cache directory where you can find all the VDB File and open it in other softwares.
   - Import with color in all 3 of blender Render Engine(EEVEE, WorkBench(solid mode), Cycle), faster if ColorValue disabled. For EEVEE and Cycle Color is set by material, for workbench a coloramp sets the color.
   - Fully support Molecular Dynamics (1 file per frame as vertex position, only OpenVDB active)
