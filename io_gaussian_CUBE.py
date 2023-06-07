@@ -53,7 +53,7 @@ except ImportError:
           
     except  ImportError:
         # Display an error message
-        msg = "Could not install scipy and matplotlib, try opening Blender with admin privilege."
+        msg = "Could not install scipy and matplotlib, try opening Blender with admin privilege, or installing mannualy"
         print(msg)
         blenderscipy=False
   
