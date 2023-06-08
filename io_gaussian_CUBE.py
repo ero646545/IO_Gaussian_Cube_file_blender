@@ -12,7 +12,7 @@ bl_info = {
 import bpy
 import numpy as np
 import os
-
+import shutil
 from bpy.props import (
         StringProperty,
         BoolProperty,
@@ -87,8 +87,7 @@ class CUBEImportOperator(bpy.types.Operator):
         layout.label(text="Use OpenVDB (only on blender 3.5+)")
         layout.prop(self, "bool_vdb")
         layout.label(text="Solid mode transparent thresholds (default 0, need reload addon or restart)")
-        layout.prop(self, "float_thresholds")    
-        
+        layout.prop(self, "float_thresholds")   
     
     #cube importer code
     def execute(self, context):
@@ -112,7 +111,7 @@ class CUBEImportOperator(bpy.types.Operator):
             # Convert data to vector array with color coding
             # This version of the code is optimised by chat gpt
             
-
+            
             seuil=preferences.float_thresholds*np.max(dataf)#Thresholds Relative to maximum
             color_start_red = np.array([0, 6 * seuil, 0])  # Green
             color_end_red = np.array([1.5, 0, 0])  # Red
@@ -154,26 +153,29 @@ class CUBEImportOperator(bpy.types.Operator):
 
             # Set the grid name to "velocity" for color display
             vdb_grid.name='color_density'
-            
-            
+
             # Create a directory for the VDB cache
             cache_dir = self.filepath + '_vdb_cache'
-            suffix = ''
-            
+
+            # Check if the cache directory already exists
             if not os.path.exists(cache_dir):
-                os.mkdir(cache_dir)
-            else:
-                # Handle file conflicts by adding a suffix to the file name
-                suffix = 1/1000
-                while os.path.exists(cache_dir + "\\" + os.path.basename(self.filepath) + matname +'_' +str(framek) +str(suffix)[1:] + ".vdb"):
-                   suffix += 1/1000
-            
-            # Define the file path for the VDB file
+                os.makedirs(cache_dir)
+
+            # Handle file conflicts
+            suffix = 0
             vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_'+ str(int(framek)).zfill(len(str(len(self.files)))) + '.vdb')
-            
-            # Writes CT volume to a VDB file
-            openvdb.write(vdbfile, [grid,vdb_grid]) #color and monochrome 
-                
+
+            while os.path.exists(vdbfile):
+                # Increment the suffix
+                suffix += 1
+
+                # Generate the new VDB file path with the incremented suffix
+                vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_'+ str(int(framek)).zfill(len(str(len(self.files)))) + '_' + str(suffix) + '.vdb')
+
+            # Writes CT volume to the new VDB file
+            openvdb.write(vdbfile, [grid, vdb_grid])  # color and monochrome
+
+                            
             
             if matname=="negative":#if negative put to negative list
                 negfile.append(vdbfile)
@@ -212,7 +214,6 @@ class CUBEImportOperator(bpy.types.Operator):
                     bpy.context.object.scale = (x1, y1, z1)
                     # Create the material
                     create_mat(matname)
-                
                 
             return
 
