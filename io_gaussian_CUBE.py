@@ -87,7 +87,7 @@ class CUBEImportOperator(bpy.types.Operator):
         layout.prop(self, "bool_vdb")
         layout.label(text="Solid mode transparent thresholds (default 0, need reload addon or restart)")
         layout.prop(self, "float_thresholds")    
-    
+        context.window_manager.fileselect_addon.sort_method = 'FILE_SORT_ALPHA'
     
     #cube importer code
     def execute(self, context):
