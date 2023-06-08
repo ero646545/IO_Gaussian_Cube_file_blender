@@ -21,51 +21,18 @@ from bpy.props import (
         FloatProperty,
         ) 
 blendervdb=True#version3.5+        
-blenderscipy=True #Lets suppose scipy/matplotlib is installed
-blendermatplotlib=True
+
 try:
     import pyopenvdb as openvdb
 except ImportError:
     blendervdb=False
-    
-   
-try:#handle the scipy error
-    from scipy.spatial import cKDTree
-    import matplotlib.colors as mcolors
-    
-    
-except ImportError:
-    print("Scipy and matplotlib are not installed. Installing Scipy and matplotlib with PIP...")
-    import sys
-    from pathlib import Path
-    import subprocess
-    py_exec = str(sys.executable)
-    lib = Path(py_exec).parent.parent / "lib"
-    # Ensure pip is installed
-    subprocess.call([py_exec, "-m", "ensurepip", "--user"])
-    # Install packages
-    subprocess.call([py_exec, "-m", "pip", "install", f"--target={str(lib)}", "matplotlib"])
-    subprocess.call([py_exec, "-m", "pip", "install", f"--target={str(lib)}", "scipy"])
-    
-    try:#Verify if installation worked
-        from scipy.spatial import cKDTree
-        import matplotlib.colors as mcolors  
-          
-    except  ImportError:
-        # Display an error message
-        msg = "Could not install scipy and matplotlib, try opening Blender with admin privilege, or installing mannualy..."
-        print(msg)
-        blenderscipy=False
-  
+
 # create addon parameter interface
 class CUBEImportPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
     def draw(self, context):
         layout = self.layout
         # Display an error message
-        if not blenderscipy:
-            layout.label(text="Could not install scipy and matplotlib.",icon='ERROR')
-            layout.label(text="Try opening Blender with admin privilege.")  
         if not blendervdb:
             layout.label(text="Could not find pyopenvdb.",icon='ERROR')
             layout.label(text="Try using Blender 3.5+")
@@ -83,10 +50,10 @@ class CUBEImportOperator(bpy.types.Operator):
     )
     int_bond : IntProperty(
                name="Number of bonding",
-               default=4*int(blenderscipy),# deactivate 
+               default=4,# deactivate 
                min=0,
                max=10,
-               description="Use cKDtree library to generate bonds with the nearest neighbour. Its an average bonding number that you can set below need scipy already installed. For tetravalent atoms bonding value is 4. Default Value is 0 Bonding is disabled.",
+               description="Use custom tree written by ChatGPT to generate bonds with the nearest neighbour. For tetravalent atoms bonding value is 4. Default Value is 0 Bonding is disabled.",
                )
     bool_color : BoolProperty(
                name="Color Value",
@@ -107,10 +74,6 @@ class CUBEImportOperator(bpy.types.Operator):
     
     def draw(self, context):# disposal of the buttons
         layout = self.layout
-        if not blenderscipy:
-            layout.label(text="Could not install scipy and matplotlib.",icon='ERROR')
-            layout.label(text="Try opening Blender with Admin privilege.")
-            layout.label(text="")  
         if not blendervdb:# just to inform that Not using OpenVDB is not optimal
             layout.label(text="Could not find pyopenvdb.",icon='ERROR')
             layout.label(text="Try using Blender 3.5+")    
@@ -132,6 +95,10 @@ class CUBEImportOperator(bpy.types.Operator):
         def create_vdb(name, matname,dataf,framek):
             if dataf.size==0:#don't try to import empty things
                 return       
+            
+            # Define your color gradient
+            #ChatGPT optimised this part of the code to avoid matplotlib.colors with custom code
+
             # Create an OpenVDB volume from the pixel data
             grid = openvdb.FloatGrid()
             
@@ -140,47 +107,53 @@ class CUBEImportOperator(bpy.types.Operator):
             
             # Blender needs grid name to be "density" or "velocity" to be colorful (need data to be Vector Float)
             grid.name = 'density'
-            if not blenderscipy==False:# handle the case where open vdb is active but not scipy/matplotlib
-                
-                # Convert data to vector array with color coding
-                # This version of the code is optimised by chat gpt
-                seuil=preferences.float_thresholds*np.max(dataf)#Thresholds Relative to maximum
-                vector_data = np.zeros(dataf.shape + (3,))
-                positive_values = np.where(dataf > seuil)
-                negative_values = np.where(dataf > seuil)
-                zero_values = np.where(dataf <= seuil)
-                if matname != "negative":
-                    colorval = dataf[positive_values]
-                    if colorval.size > 0:
-                        min_value = np.min(colorval)
-                        max_value = np.max(colorval)
-                        if min_value != max_value:  # Check if the minimum and maximum values are not equal
-                            normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
-                            gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 6 * seuil, 0), (1.5, 0, 0)])  # Define your gradient colors
-                            vector_data[positive_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
-                    else:
-                        return
-                else:
-                    colorval = dataf[negative_values]
-                    if colorval.size > 0:
-                        min_value = np.min(colorval)
-                        max_value = np.max(colorval)
-                        if min_value != max_value:  # Check if the minimum and maximum values are not equal
-                            normalized_colorval = (colorval - min_value) / (max_value - min_value)  # Normalize color values between 0 and 1
-                            gradient = mcolors.LinearSegmentedColormap.from_list('color_gradient', [(0, 2 * seuil, 0), (0, 0, 6)])  # Define your gradient colors
-                            vector_data[negative_values] = gradient(normalized_colorval)[:, :3]  # Apply gradient colors RGB to vector_data
-                    else:
-                        return
-                # Assign zeros for zero_values
-                vector_data[zero_values] = np.zeros((3,))
-     
-                # Create a Blender-compatible VDB grid
-                vdb_grid = openvdb.Vec3SGrid()
-                vdb_grid.copyFromArray(np.array(vector_data).reshape(dataf.shape + (3,)))
 
-                # Set the grid name to "velocity" for color display
-                vdb_grid.name='color_density'
-                
+            # Convert data to vector array with color coding
+            # This version of the code is optimised by chat gpt
+            
+
+            seuil=preferences.float_thresholds*np.max(dataf)#Thresholds Relative to maximum
+            color_start_red = np.array([0, 6 * seuil, 0])  # Green
+            color_end_red = np.array([1.5, 0, 0])  # Red
+            color_start_blue = np.array([0, 2 * seuil, 0])  # Green
+            color_end_blue = np.array([0, 0, 6])  # Red
+            
+            vector_data = np.zeros(dataf.shape + (3,))
+            positive_values = np.where(dataf > seuil)
+            negative_values = np.where(dataf > seuil)
+            zero_values = np.where(dataf <= seuil)
+            if matname != "negative":
+                colorval = dataf[positive_values]
+                if colorval.size > 0:
+                    min_value = np.min(colorval)
+                    max_value = np.max(colorval)
+                    if min_value != max_value:
+                        normalized_colorval = (colorval - min_value) / (max_value - min_value)
+                        vector_data[positive_values] = color_start_red * (1 - normalized_colorval[:, np.newaxis]) + color_end_red * normalized_colorval[:, np.newaxis]#ChatGPT optimised this part of the code to avoid matplotlib
+
+                else:
+                    return
+            else:
+                colorval = dataf[negative_values]
+                if colorval.size > 0:
+                    min_value = np.min(colorval)
+                    max_value = np.max(colorval)
+                    if min_value != max_value:
+                        normalized_colorval = (colorval - min_value) / (max_value - min_value)
+                        vector_data[negative_values] = color_start_blue * (1 - normalized_colorval[:, np.newaxis]) + color_end_blue * normalized_colorval[:, np.newaxis]
+
+                else:
+                    return
+            # Assign zeros for zero_values
+            vector_data[zero_values] = np.zeros((3,))
+ 
+            # Create a Blender-compatible VDB grid
+            vdb_grid = openvdb.Vec3SGrid()
+            vdb_grid.copyFromArray(np.array(vector_data).reshape(dataf.shape + (3,)))
+
+            # Set the grid name to "velocity" for color display
+            vdb_grid.name='color_density'
+            
             
             # Create a directory for the VDB cache
             cache_dir = self.filepath + '_vdb_cache'
@@ -198,10 +171,7 @@ class CUBEImportOperator(bpy.types.Operator):
             vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_'+ str(int(framek)).zfill(len(str(len(self.files)))) + '.vdb')
             
             # Writes CT volume to a VDB file
-            if not blenderscipy==False:# handle again the case where open vdb is active but not scipy/matplotlib
-                openvdb.write(vdbfile, [grid,vdb_grid]) #color and monochrome 
-            else:
-                openvdb.write(vdbfile, [grid])
+            openvdb.write(vdbfile, [grid,vdb_grid]) #color and monochrome 
                 
             
             if matname=="negative":#if negative put to negative list
@@ -376,48 +346,72 @@ class CUBEImportOperator(bpy.types.Operator):
             bpy.context.object.data.materials.append(mat)
             return mat
         
-        def JamesBond(atoms):
-            #____________________________________________________#
-            #create edge tree     
-            #____________________________________________________#   
-            # Create a KDTree from the atom coordinates
-            tree = cKDTree(atoms)
+        def JamesBond(atoms):# A custom code that uses Tree generated by chatGPT, no correction required.
+            # Define the size of the grid cells
+            cell_size = max(covalent_radii.values()) * 3
+
+            # Create a dictionary to store atoms in each grid cell
+            grid = {}
+
+            # Loop through all atoms and assign them to grid cells
+            for i, coord in enumerate(atoms):
+                cell_coord = tuple(int(c / cell_size) for c in coord)
+                if cell_coord not in grid:
+                    grid[cell_coord] = []
+                grid[cell_coord].append(i)
 
             # Create a new mesh object
             mesh = bpy.data.meshes.new(name=os.path.basename(self.filepath))
             object = bpy.data.objects.new(name=os.path.basename(self.filepath), object_data=mesh)
-            object.scale=(x1,y1,z1)# set the right scale
+            object.scale = (x1, y1, z1)  # set the right scale
             bpy.context.scene.collection.objects.link(object)
-            
+
             # Create a list to hold the edges
             edges = []
-            bonds=preferences.int_bond
+            bonds = preferences.int_bond
+
             # Loop through all atoms
             for i, coord1 in enumerate(atoms):
-                # Find the nearest neighbors of the atom
-                nn_indices = tree.query(coord1, k=bonds)[1][1:]
-                
-                for nn_idx in nn_indices:
-                    # Get the coordinate of the nearest neighbor
-                    if nn_idx < len(atoms):
-                        coord2 = atoms[nn_idx]
-                        coord1 = np.array(coord1)
-                        coord2 = np.array(coord2)
-                        dist = np.linalg.norm((coord1 - coord2)*(x1,y1,z1))
-                        # Get the covalent radii for each atom
-                        radius1 = covalent_radii.get(UA[i], 1.0)
-                        radius2 = covalent_radii.get(UA[nn_idx], 1.0)
-                        # If the distance between the two spheres is less than the sum of their covalent radii, they are considered bonded
-                        if dist < (radius1*3 + radius2*3):
-                            # Add the edge to the list
-                            edges.append((i, nn_idx))
+                nn_indices = []
+                nn_distances = []
+
+                # Get the grid cell coordinates for the current atom
+                cell_coord = tuple(int(c / cell_size) for c in coord1)
+
+                # Loop through the neighboring grid cells
+                for dz in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        for dx in [-1, 0, 1]:
+                            neighbor_cell = (cell_coord[0] + dx, cell_coord[1] + dy, cell_coord[2] + dz)
+                            if neighbor_cell in grid:
+                                # Loop through the atoms in the neighboring grid cell
+                                for j in grid[neighbor_cell]:
+                                    if i != j:
+                                        coord2 = atoms[j]
+                                        coord1 = np.array(coord1)
+                                        coord2 = np.array(coord2)
+                                        dist = np.linalg.norm((coord1 - coord2) * (x1, y1, z1))
+                                        nn_indices.append(j)
+                                        nn_distances.append(dist)
+
+                # Sort the neighbors based on distance
+                sorted_indices = [i for _, i in sorted(zip(nn_distances, nn_indices))]
+
+                # Add the closest bonds to the edges list
+                for k in range(bonds-1):
+                    if k < len(sorted_indices):
+                        nn_idx = sorted_indices[k]
+                        edges.append((i, nn_idx))
 
             # Add the edges to the mesh
             mesh.from_pydata(atoms, edges, [])
-            bpy.context.view_layer.objects.active = object#select it 
+            bpy.context.view_layer.objects.active = object  # select it
+
             # Update the mesh
             mesh.update()
             return object
+
+
         
         posfile=[]#future list for create_vdb() for list import
         negfile=[]
