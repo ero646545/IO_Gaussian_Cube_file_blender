@@ -27,6 +27,7 @@ try:
 except ImportError:
     blendervdb=False
 
+  
 # create addon parameter interface
 class CUBEImportPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
@@ -97,7 +98,7 @@ class CUBEImportOperator(bpy.types.Operator):
                 return       
             
             # Define your color gradient
-            #ChatGPT optimised this part of the code to avoid matplotlib.colors with custom code
+           
 
             # Create an OpenVDB volume from the pixel data
             grid = openvdb.FloatGrid()
@@ -129,7 +130,7 @@ class CUBEImportOperator(bpy.types.Operator):
                     max_value = np.max(colorval)
                     if min_value != max_value:
                         normalized_colorval = (colorval - min_value) / (max_value - min_value)
-                        vector_data[positive_values] = color_start_red * (1 - normalized_colorval[:, np.newaxis]) + color_end_red * normalized_colorval[:, np.newaxis]#ChatGPT optimised this part of the code to avoid matplotlib
+                        vector_data[positive_values] = color_start_red * (1 - normalized_colorval[:, np.newaxis]) + color_end_red * normalized_colorval[:, np.newaxis]
 
                 else:
                     return
