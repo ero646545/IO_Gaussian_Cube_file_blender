@@ -1,7 +1,7 @@
 # IO_Gaussian_Cube_file_blender
 **Addon to import Gaussian Cube File, For Blender 2.9-3.5+ (written in Blender 3.5).**
 
-_Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) of Sorbonne University._
+_Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) at Sorbonne University._
 
 (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/fe48a18c-12d8-4a01-af41-56684837ff60)
