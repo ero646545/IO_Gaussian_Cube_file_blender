@@ -98,5 +98,6 @@ Slices
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/72aef26d-0d97-423c-ab4f-3aef9399b9e0)
 
+To import Molecular Dynamics, just select more file by pressing Ctrl or Shift and clicking. Or press A if you want all files to be selected.
 
 A big thanks to Matthieu Salanne and the rich community of the ISCD.
