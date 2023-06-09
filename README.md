@@ -5,6 +5,9 @@ Addon to import Gaussian Cube File, Only For Blender 2.9-3.5+ (written in Blende
 
 To use Older versions of Blender you may need to disable OpenVDB as pyopenvdb if it isn't already.
 If you run out of memory, OpenVDB volume may not display volume as desired. (i run on this issue with 4GB of ram)
+
+Watch the French Tutorial: https://youtu.be/imFo62jpXp0
+
 Main functionality:
   - Use the Built in pyopenvdb, numpy, os
   - ChatGPT wrote custom library to replace matplotlib.color for a color gradient, and ckdtree for nearest neighbour bonding.
