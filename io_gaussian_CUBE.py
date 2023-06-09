@@ -1,4 +1,4 @@
-#Written by René Meng for a 3 month internship at the ISCD of Sorbonne University.
+#Written by René Meng for a 3 month internship about Visualisation at the Institute of Computing and Data Sciences(ISCD) of Sorbonne University.
 bl_info = {
     "name": ".CUBE Import ",
     "description": "Import Gaussian Volumetrics Cube File",
