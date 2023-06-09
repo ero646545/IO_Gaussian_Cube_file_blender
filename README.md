@@ -11,17 +11,23 @@ If you run out of memory, OpenVDB volume may not display volume as desired. (i r
 
 Watch the French Tutorial: https://youtu.be/imFo62jpXp0
 
-Main functionality:
+**Main functionality:**
   - Use the Built in pyopenvdb, numpy, os
   - ChatGPT wrote custom library to replace matplotlib.color for a color gradient, and ckdtree for nearest neighbour bonding.
   - Fully support Molecular Dynamics: 1 file per frame as vertex position (only if OpenVDB active)
-Installation
-1Download the code, then extract it.
-2 Open Blender Edit>Preferences>Addon>install from file
-3 Find the IO_Gaussian_CUBE.py addon and open it
-4 check the addon
+  
+**Installation**
 
-How to Use it ?
+- 1Download the code, then extract it.
+- 
+- 2 Open Blender Edit>Preferences>Addon>install from file
+- 
+- 3 Find the IO_Gaussian_CUBE.py addon and open it
+- 
+- 4 check the addon
+
+**How to Use it ?**
+
 File>import>Gaussian_Cube
 It opens the File Browser
 
