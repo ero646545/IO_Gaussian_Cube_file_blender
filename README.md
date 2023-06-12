@@ -12,7 +12,7 @@ If you run out of memory, OpenVDB volume may not display volume as desired. (i r
 Watch the French Tutorial: https://youtu.be/imFo62jpXp0
 
 **Main functionality:**
-  - Use the Built in pyopenvdb, numpy, os
+  - Use the Built in pyopenvdb, numpy, os, shutil
   - ChatGPT wrote custom library to replace matplotlib.color for a color gradient, and ckdtree for nearest neighbour bonding.
   - Fully support Molecular Dynamics: 1 file per frame as vertex position (only if OpenVDB active)
   
