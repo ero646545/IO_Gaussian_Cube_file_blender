@@ -1,4 +1,3 @@
-#Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) of Sorbonne University.
 bl_info = {
     "name": ".CUBE Import ",
     "description": "Import Gaussian Volumetrics Cube File",
@@ -171,7 +170,7 @@ class CUBEImportOperator(bpy.types.Operator):
                 suffix += 1
 
                 # Generate the new VDB file path with the incremented suffix
-                vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_'+ str(int(framek)).zfill(len(str(len(self.files)))) + '_' + str(suffix) + '.vdb')
+                vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_n°'+ str(suffix) + '_' + str(int(framek)).zfill(len(str(len(self.files))))  + '.vdb')
 
             # Writes CT volume to the new VDB file
             openvdb.write(vdbfile, [grid, vdb_grid])  # color and monochrome
