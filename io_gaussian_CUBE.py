@@ -259,12 +259,11 @@ class CUBEImportOperator(bpy.types.Operator):
             add_node.location = (-400, 0)
             seuil=preferences.float_thresholds
             add_node.inputs[1].default_value = .40+seuil
-            try:
-                gn_mat = gn_tree.nodes.new(type="GeometryNodeSetMaterial")
-                #set material
-                gn_mat.inputs[2].default_value =  create_mat(matname)# Create material
-            except:
-                print("no mat")
+            gn_mat = gn_tree.nodes.new(type="GeometryNodeSetMaterial")
+            #set material
+           
+            gn_mat.inputs[2].default_value =  create_mat(matname)# Create material
+            
             # Get the active node tree, the folowing line is to bypass a blender python API impass
             #select the area
             bpy.context.space_data.node_tree = node_tree
@@ -290,12 +289,8 @@ class CUBEImportOperator(bpy.types.Operator):
             gn_tree.links.new(gn_inputs.outputs[0], gn_volume.inputs[0])
             gn_tree.links.new(gn_inputs.outputs[1], add_node.inputs[0])
             gn_tree.links.new(add_node.outputs[0], gn_volume.inputs[4])
-            try:
-                gn_tree.links.new(gn_volume.outputs[0], gn_mat.inputs[0])
-                gn_tree.links.new(gn_mat.outputs[0], gn_outputs.inputs[0])
-            except:
-                print("no mat, connected to default")
-                gn_tree.links.new(gn_volume.outputs[0], gn_outputs.inputs[0])
+            gn_tree.links.new(gn_volume.outputs[0], gn_mat.inputs[0])
+            gn_tree.links.new(gn_mat.outputs[0], gn_outputs.inputs[0])
             if matname=="negative": # solve a display bug to avoid interlacing 
                 obj.delta_location=(x1/nx*.1,y1/ny*.1,z1/nz*.1)
             return  
