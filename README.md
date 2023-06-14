@@ -19,11 +19,11 @@ Watch the French Tutorial: https://youtu.be/imFo62jpXp0
 **Installation**
 
 - 1Download the code, then extract it.
-- 
+  
 - 2 Open Blender Edit>Preferences>Addon>install from file
-- 
+  
 - 3 Find the IO_Gaussian_CUBE.py addon and open it
-- 
+  
 - 4 check the addon
 
 **How to Use it ?**
