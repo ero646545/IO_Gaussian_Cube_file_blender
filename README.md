@@ -67,6 +67,10 @@ For workbench a hard coded coloramp sets the color in the OpenVDB grid, you can 
 
 If disabled, only one color will be available, no material is created.
 
+Calibrating color ramp to match Workbench, you can edit the "multiply" value.
+
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a1f6e7b1-a1ea-46e3-a914-84fa7e86f30e)
+
 
 
  - Support Importing Gaussian Cube file with Geometry nodes (No support for Molecular Dynamics or EEVEE, Only Monochrome color is supported for Workbench,)
@@ -97,6 +101,7 @@ Open VDB support many parameters. You can mannualy change the density, or even m
 Slices
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/72aef26d-0d97-423c-ab4f-3aef9399b9e0)
+
 
 To import Molecular Dynamics, just select more file by pressing Ctrl or Shift and clicking. Or press A if you want all files to be selected.
 
