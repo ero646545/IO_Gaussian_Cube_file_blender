@@ -14,7 +14,7 @@ Watch the French Tutorial: https://youtu.be/imFo62jpXp0
 **Main functionality:**
   - Use the Built in pyopenvdb, numpy, os, shutil
   - ChatGPT wrote custom library to replace matplotlib.color for a color gradient, and ckdtree for nearest neighbour bonding.
-  - Fully support Molecular Dynamics: 1 file per frame as vertex position (only if OpenVDB active)
+  - Fully support Molecular Dynamics: 1 file per frame as vertex position (only if OpenVDB active) see example for graphene: https://youtu.be/7KqpsXqUz4U
   
 **Installation**
 
@@ -62,16 +62,14 @@ If enabled EEVEE and Cycle Color is set by material
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/5e53f496-0c1b-4cfd-a570-7d132af55de0)
 
-For workbench a hard coded coloramp sets the color in the OpenVDB grid, you can still choose between grids
-![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a63cc5dd-7649-4036-b832-905d80490a5c)
-
-If disabled, only one color will be available, no material is created.
-
 Calibrating color ramp to match Workbench, you can edit the "multiply" value.
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a1f6e7b1-a1ea-46e3-a914-84fa7e86f30e)
 
+For workbench a hard coded coloramp sets the color in the OpenVDB grid, you can still choose between grids
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a63cc5dd-7649-4036-b832-905d80490a5c)
 
+If disabled, only one color will be available, no material is created.
 
  - Support Importing Gaussian Cube file with Geometry nodes (No support for Molecular Dynamics or EEVEE, Only Monochrome color is supported for Workbench,)
   
