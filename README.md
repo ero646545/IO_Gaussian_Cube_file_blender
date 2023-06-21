@@ -111,6 +111,8 @@ you can make cut Slices
 you can add a mesh and choose a Volume To Mesh Modifier to draw isosurface
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/ba225e57-abef-4467-ab2e-0135398f1444)
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/866d132e-0dda-4555-a486-20a4e4effa2b)
+
 
 you can make Mesh Bonds using Skin modifier (then you can press Ctrl+A to apply the modifier)
 
