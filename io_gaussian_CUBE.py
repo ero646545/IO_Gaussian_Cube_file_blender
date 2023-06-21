@@ -3,7 +3,7 @@ bl_info = {
     "description": "Import Gaussian Volumetrics Cube File",
     "author": "René Meng - ISCD",
     "version": (1, 0, 0),
-    "blender": (3, 5, 0),
+    "blender": (3, 5, 1),
     "location": "File -> Import -> CUBE (.cube)",
     "warning": "",
     "doc_url": "https://iscd.sorbonne-universite.fr/",
