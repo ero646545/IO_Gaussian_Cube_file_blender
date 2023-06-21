@@ -69,7 +69,7 @@ class CUBEImportOperator(bpy.types.Operator):
                default=0.01,
                min=0,
                max=1,
-               description="Value from which the volume is transparent , need to save setting delete the vdb file and Restart Blender to apply changes(yes its tricky)",
+               description="Value from which the volume is transparent , need to save setting delete the vdb_cache file and Restart Blender to apply changes(yes its tricky)",
                )
     filepath: bpy.props.StringProperty(subtype="FILE_PATH")
     
@@ -86,7 +86,7 @@ class CUBEImportOperator(bpy.types.Operator):
         layout.prop(self, "bool_color")
         layout.label(text="Use OpenVDB (only on blender 3.5+)")
         layout.prop(self, "bool_vdb")
-        layout.label(text="Solid mode transparent thresholds (default 0, need reload addon or restart)")
+        layout.label(text="Solid mode transparent thresholds (default 0)")
         layout.prop(self, "float_thresholds")   
     
     #cube importer code
