@@ -65,7 +65,7 @@ class CUBEImportOperator(bpy.types.Operator):
                default=blendervdb,
                description="Use OpenVDB to display volume, this method is faster and better but allows less tweaking. This create 2 positive and negative VDB file in the local directory. Uncheck only if OpenVDB is unsupported")
     float_thresholds : FloatProperty(
-               name="Define the solid mode relative thresholds (default 0)",
+               name="Define the solid mode relative thresholds (default 0.01)",
                default=0.01,
                min=0,
                max=1,
@@ -86,7 +86,7 @@ class CUBEImportOperator(bpy.types.Operator):
         layout.prop(self, "bool_color")
         layout.label(text="Use OpenVDB (only on blender 3.5+)")
         layout.prop(self, "bool_vdb")
-        layout.label(text="Solid mode transparent thresholds (default 0)")
+        layout.label(text="Solid mode transparent thresholds (default 0.01)")
         layout.prop(self, "float_thresholds")   
     
     #cube importer code
