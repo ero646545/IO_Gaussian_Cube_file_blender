@@ -105,17 +105,17 @@ You can mannualy change the density
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/087b13f3-2d86-4555-84d9-c7f2989c774e)
 
-you can make cut Slices
+You can make cut Slices
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a2e395da-e611-4356-819c-36077067f189)
 
-you can add a mesh and choose a Volume To Mesh Modifier to draw isosurface
+You can add a mesh and choose a Volume To Mesh Modifier to draw isosurface
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/ba225e57-abef-4467-ab2e-0135398f1444)
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/866d132e-0dda-4555-a486-20a4e4effa2b)
 
 
-you can make Mesh Bonds using Skin modifier **very slow sometimes** (then you can try pressing Ctrl+A to apply the modifier):
+You can make Mesh Bonds using Skin modifier **very slow sometimes** (then you can try pressing Ctrl+A to apply the modifier):
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a526c96d-8825-4cf3-81ce-ac775e1bb37d)
 
