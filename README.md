@@ -91,16 +91,30 @@ Imported with OpenVDB
 
 You may need to delete cache Regularly by simply deleting the Cache directory, they contains the VDB File.
 
+To import Molecular Dynamics, just select more file by pressing Ctrl or Shift and clicking. Or press A if you want all files to be selected.
 
-Open VDB support many parameters. You can mannualy change the density, or even make Slices.
+Just press Spacebar or play to start playing MD:
+
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/cc999c2e-6217-4b1b-9c20-60e7885d5bea)
+
+
+**Other things you can do with OpenVDB**
+
+You can mannualy change the density
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/087b13f3-2d86-4555-84d9-c7f2989c774e)
 
-Slices
+you can make cut Slices
 
-![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/72aef26d-0d97-423c-ab4f-3aef9399b9e0)
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a2e395da-e611-4356-819c-36077067f189)
 
+you can add a mesh and choose a Volume To Mesh Modifier to draw isosurface
 
-To import Molecular Dynamics, just select more file by pressing Ctrl or Shift and clicking. Or press A if you want all files to be selected.
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/ba225e57-abef-4467-ab2e-0135398f1444)
+
+you can make Mesh Bonds using Skin modifier (then you can press Ctrl+A to apply the modifier)
+
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a526c96d-8825-4cf3-81ce-ac775e1bb37d)
+
 
 A big thanks to Matthieu Salanne and the rich community of the ISCD.
