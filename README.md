@@ -115,9 +115,14 @@ you can add a mesh and choose a Volume To Mesh Modifier to draw isosurface
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/866d132e-0dda-4555-a486-20a4e4effa2b)
 
 
-you can make Mesh Bonds using Skin modifier (then you can press Ctrl+A to apply the modifier)
+you can make Mesh Bonds using Skin modifier **very slow sometimes** (then you can try pressing Ctrl+A to apply the modifier):
 
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/a526c96d-8825-4cf3-81ce-ac775e1bb37d)
+
+You can add balls to atoms:
+
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/e3ba333a-81fb-48cd-969c-0c4fd024ea33)
+
 
 
 A big thanks to Matthieu Salanne and the rich community of the ISCD.
