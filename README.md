@@ -122,4 +122,4 @@ you can make Mesh Bonds using Skin modifier (then you can press Ctrl+A to apply 
 A big thanks to Matthieu Salanne and the rich community of the ISCD.
 
 
-This software is licensed as  GNU General Public License (GPL)
+This software is licensed as  GNU General Public License (GPL) https://www.gnu.org/licenses/gpl-3.0.html
