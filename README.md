@@ -5,7 +5,7 @@ _Written by René Meng for a 3 month internship about scientific visualisation w
 
 (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/fe48a18c-12d8-4a01-af41-56684837ff60)
-![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/6a5408d9-8b64-45ce-b53a-87183f310ad6)
+![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/e5da3f73-b708-4bef-b3f9-bee979b6ac7e)
 
 To use Older versions of Blender you may need to disable OpenVDB as pyopenvdb if it isn't already.
 If you run out of memory, OpenVDB volume may not display volume as desired. (i run on this issue with 4GB of ram)
