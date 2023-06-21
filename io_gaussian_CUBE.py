@@ -82,7 +82,7 @@ class CUBEImportOperator(bpy.types.Operator):
             
         layout.label(text="Number of bond per atom. A 0 value is disabled")
         layout.prop(self, "int_bond")
-        layout.label(text="I want more colours!(slower if checked)")
+        layout.label(text="I want more colours! (slower if checked)")
         layout.prop(self, "bool_color")
         layout.label(text="Use OpenVDB (only on blender 3.5+)")
         layout.prop(self, "bool_vdb")
