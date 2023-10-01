@@ -205,7 +205,7 @@ class CUBEImportOperator(bpy.types.Operator):
                    
                     # Add the volume to the scene
                     bpy.ops.object.volume_import(filepath=posfile[framek], files=[{'name': f} for f in posfile])
-                    #obj=bpy.context.object.data#still experimental, will fix later
+                    obj=bpy.context.object.data#still experimental, will fix later
                     if framek!=0:
                         obj.is_sequence = True
                     obj.frame_duration = framek 
