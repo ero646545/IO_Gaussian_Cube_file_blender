@@ -58,7 +58,7 @@ class CUBEImportOperator(bpy.types.Operator):
                )
     bool_color : BoolProperty(
                name="Color Value",
-               default=False,
+               default=True,
                description="I want to color Positive value to Red and Negative value in Blue")
     bool_vdb : BoolProperty(
                name="Open VDB",
