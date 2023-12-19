@@ -1,5 +1,6 @@
 # IO_Gaussian_Cube_file_blender
 **Addon to import Gaussian Cube File, For Blender 3.0-3.5+ (written in Blender 3.5).**
+Seem not working properly for blender 4.0 please use currently a previous version of blender, fix comming soon.
 
 _Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) at Sorbonne University._
 
