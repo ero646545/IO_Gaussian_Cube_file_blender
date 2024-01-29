@@ -170,7 +170,7 @@ class CUBEImportOperator(bpy.types.Operator):
                 suffix += 1
 
                 # Generate the new VDB file path with the incremented suffix
-                vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_n°'+ str(suffix) + '_' + str(int(framek)).zfill(len(str(len(self.files))))  + '.vdb')
+                vdbfile = os.path.join(cache_dir, os.path.basename(self.filepath) + matname +'_n'+ str(suffix) + '_' + str(int(framek)).zfill(len(str(len(self.files))))  + '.vdb')
 
             # Writes CT volume to the new VDB file
             openvdb.write(vdbfile, [grid, vdb_grid])  # color and monochrome
