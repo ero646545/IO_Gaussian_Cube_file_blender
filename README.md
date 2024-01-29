@@ -2,6 +2,7 @@
 **Addon to import Gaussian Cube File, For Blender 3.0-3.6+ (written in Blender 3.5).**
 
 _Seem not working properly for blender 4.0 please use currently a previous version of blender, fix comming soon._
+Edit: Fixed "°" was not supported by the system anymore...
 
 _Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) at Sorbonne University._
 
