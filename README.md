@@ -89,7 +89,7 @@ Imported with OpenVDB
 
 
 
-  - Uses OPENVDB, the read volume is exported to a cache file named *_vdb_cache, and then imported back into Blender. Its in ./*_vdb_cache directory where you can find all the VDB File and open it in other softwares.
+  - Uses OPENVDB, the read volume is exported to a cache file named *_vdb_cache, and then imported back into Blender. Its in ./*_vdb_cache directory where you can find all the VDB File and open it in other softwares. (Avoid leaving your file in a USB or SD card, unless you want to get the VDB cache in it)
   
 ![image](https://github.com/ero646545/IO_Gaussian_Cube_file_blender/assets/30327029/7e712ac0-48e7-4d79-9d13-07734be717c8)
 
