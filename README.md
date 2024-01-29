@@ -1,9 +1,6 @@
 # IO_Gaussian_Cube_file_blender
 **Addon to import Gaussian Cube File, For Blender 3.0-4.0+ (written in Blender 3.5).**
 
-_Seem not working properly for blender 4.0 please use currently a previous version of blender, fix comming soon._
-Edit: Fixed "°" was not supported by the system anymore...
-
 _Written by René Meng for a 3 month internship about scientific visualisation with Matthieu Salanne at the Institute of Computing and Data Sciences(ISCD) at Sorbonne University._
 
 (If OpenVDB is active this addon export VDB file to ./*_vdb_cache directory)
@@ -130,5 +127,8 @@ You can add balls to atoms:
 
 A big thanks to Matthieu Salanne and the rich community of the ISCD.
 
+_Seem not working properly for blender 4.0 please use currently a previous version of blender, fix comming soon._
+
+Edit: Fixed "°" was not supported by the system anymore...
 
 This software is licensed as  GNU General Public License (GPL) https://www.gnu.org/licenses/gpl-3.0.html
